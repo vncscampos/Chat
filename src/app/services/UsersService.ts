@@ -22,7 +22,16 @@ class UserService {
         await this.userRepository.save(user);
 
         return user;
+    }
 
+    async findByEmail(email: string) {
+        const user = await this.userRepository.findOne({ email });
+
+        if (!user) {
+            throw new Error('User does not exist');
+        }
+
+        return user;
     }
 }
 
