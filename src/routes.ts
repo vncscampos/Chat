@@ -4,8 +4,6 @@ import { SettingsController } from './app/controllers/SettingsController';
 import { UsersController } from './app/controllers/UsersController';
 import { MessagesController } from './app/controllers/MessagesController';
 
-
-
 const routes = Router();
 
 const settingsController = new SettingsController();

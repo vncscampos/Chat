@@ -22,7 +22,6 @@ class MessagesController {
 
         return res.json(list);
     }
-
 }
 
 export { MessagesController }

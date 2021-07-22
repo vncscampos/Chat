@@ -15,14 +15,18 @@ app.set('view engine', 'html');
 
 app.get('/pages/client', (req, res) => {
     return res.render('html/client.html');
-})
+});
+
+app.get('/pages/admin', (req, res) => {
+    return res.render('html/admin.html');
+});
 
 const http = createServer(app); // Criando protocolo HTTP
 const io = new Server(http);    // Criando protocolo WebSocket
 
 io.on('connection', (socket: Socket) => {
     console.log('Se conectou', socket.id)
-})
+});
 
 app.use(express.json());
 

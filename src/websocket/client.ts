@@ -1,6 +1,6 @@
 import { io } from '../app';
 import { ConnectionsService } from '../app/services/ConnectionsService';
-import { UserService } from '../app/services/UsersService';
+import { UsersService } from '../app/services/UsersService';
 import { MessageService } from '../app/services/MessageService';
 
 interface IParams {
@@ -11,7 +11,7 @@ interface IParams {
 io.on('connect', (socket) => {
     const connectionsService = new ConnectionsService();
 
-    const userService = new UserService();
+    const userService = new UsersService();
     const messagesService = new MessageService();
 
     socket.on('client_first_access', async (params) => {
@@ -54,5 +54,38 @@ io.on('connect', (socket) => {
             text,
             user_id,
         });
+
+        const allMessages = await messagesService
+            .listByUser(user_id);
+
+        socket.emit("client_list_all_messages", allMessages);
+
+        const allUsers = await connectionsService.findAllWithoutAdmin();
+        io.emit("admin_list_all_users", allUsers);
     });
+
+    socket.on("client_send_to_admin", async (params) => {
+        const { text, socket_admin_id } = params;
+    
+        const socket_id = socket.id;
+    
+        const { user_id } = await connectionsService.findBySocketID(socket_id);
+    
+        const message = await messagesService.create({
+          text,
+          user_id,
+        });
+    
+        io.to(socket_admin_id).emit("admin_receive_message", {
+          message,
+          socket_id,
+        });
+    
+        // Melhorias
+      });
+    
+      socket.on("disconnect", async () => {
+        console.log(socket.id);
+        await connectionsService.deleteBySocketId(socket.id);
+      });
 });

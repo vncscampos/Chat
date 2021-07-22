@@ -3,7 +3,7 @@ import { User } from "../entity/User";
 
 import { UserRepository } from "../repositories/UsersRepository"
 
-class UserService {
+class UsersService {
     private userRepository: Repository<User>;
 
     constructor() {
@@ -35,4 +35,4 @@ class UserService {
     }
 }
 
-export { UserService }
+export { UsersService }
